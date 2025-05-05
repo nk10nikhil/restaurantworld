@@ -131,7 +131,7 @@
                                 <h3>Support</h3>
                             </div>
                             <div class="box-content text-center">
-                                <h3><i class="fa fa-phone"></i> +84 123 123 123</h3>
+                                <h3><i class="fa fa-phone"></i> +91 7777048666</h3>
                                 <span class="small">
                                     Please contact with us if you have any questions. We are avalible 24h.
                                 </span>

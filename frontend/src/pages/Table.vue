@@ -16,12 +16,12 @@
 
             <div class="icons">
                 <img src="../assets/images/icon-2.png" alt="">
-                <h3>+84 123 123 123</h3>
+                <h3>+91 7777048666</h3>
             </div>
 
             <div class="icons">
                 <img src="../assets/images/icon-3.png" alt="">
-                <h3>02 Duong Khue, Cau Giay, Ha Noi, Viet Nam</h3>
+                <h3>GCET, Greater Noida, UP, India</h3>
             </div>
 
         </div>
@@ -76,9 +76,7 @@
                         id="uMessage" cols="30" rows="10" v-model="orderObj.note"></textarea>
                 </div>
                 <div class="input-box">
-                    <iframe class="map"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.8938607918262!2d105.77118931493284!3d21.03693248599396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454b6336e0f73%3A0x713103931378d09e!2zMiBExrDGoW5nIEtodcOqLCBNYWkgROG7i2NoLCBD4bqndSBHaeG6pXksIEjDoCBO4buZaQ!5e0!3m2!1svi!2s!4v1637511438358!5m2!1svi!2s"
-                        loading="lazy"></iframe>
+                    <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12389.204264689712!2d77.5031987571963!3d28.46419786698042!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cea1a83be5989%3A0x6a3690bfa642b5c3!2sGalgotias%20College!5e0!3m2!1sen!2sin!4v1746432484037!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
 
