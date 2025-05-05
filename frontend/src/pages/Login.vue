@@ -43,7 +43,14 @@ export default {
             loginObj: { email: "", pass: "" },
             matchUser: undefined,
             errors: [],
+            redirect: null
         }
+    },
+
+    created() {
+        // Check if we have a redirect parameter in the URL
+        const params = new URLSearchParams(window.location.search);
+        this.redirect = params.get('redirect');
     },
 
     methods: {
@@ -58,6 +65,42 @@ export default {
             this.matchUser = data.data;
         },
 
+        // Add guest cart items to the user's cart in the database
+        async mergeGuestCart(userId) {
+            const guestCart = JSON.parse(localStorage.getItem('guestCart')) || [];
+            
+            if (guestCart.length > 0) {
+                // For each item in the guest cart, add it to the user's cart
+                for (const item of guestCart) {
+                    try {
+                        // Check if this item already exists in the user's cart
+                        const existItem = await axios.get(`/cartItem/${userId}/${item.food_id}`);
+                        
+                        if (existItem.data) {
+                            // Update quantity if item exists
+                            await axios.put('/cartItem/', {
+                                user_id: userId,
+                                food_id: item.food_id,
+                                item_qty: parseInt(existItem.data.item_qty) + parseInt(item.qty)
+                            });
+                        } else {
+                            // Add new item if it doesn't exist
+                            await axios.post('/cartItem/', {
+                                user_id: userId,
+                                food_id: item.food_id,
+                                item_qty: parseInt(item.qty)
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error merging cart item:', error);
+                    }
+                }
+                
+                // Clear guest cart after merging
+                localStorage.removeItem('guestCart');
+            }
+        },
+
         async handleSubmit(e) {
             this.errors = [];
 
@@ -69,7 +112,6 @@ export default {
                     this.errors.push('Email must be valid');
                 }
             }
-
 
             if (!this.loginObj.pass) {
                 this.errors.push('Password is required');
@@ -86,9 +128,19 @@ export default {
                 }
                 else {
                     if (this.matchUser.user_password === this.loginObj.pass) {
+                        // Save the user in store
                         this.matchUser.user_password = "";
                         this.setUser(this.matchUser);
-                        this.$router.push("/");
+                        
+                        // Merge guest cart with user cart
+                        await this.mergeGuestCart(this.matchUser._id);
+                        
+                        // Redirect to the appropriate page
+                        if (this.redirect === 'checkout') {
+                            this.$router.push("/checkout");
+                        } else {
+                            this.$router.push("/");
+                        }
                     }
                     else {
                         this.errors.push("Incorrect email or password!")
@@ -96,9 +148,7 @@ export default {
                 }
             }
         }
-
     }
-
 }
 </script>
 

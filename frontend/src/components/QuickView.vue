@@ -1,7 +1,7 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="2000" ref="alert" />
 
-    <div v-if="user" class="quick-view">
+    <div class="quick-view">
         <div class="quick-view-inner" v-for="f in selectedFood" :key="f">
             <h2 class="d-flex justify-content-between">{{ f.food_name }}
                 <slot></slot>
@@ -23,17 +23,6 @@
                     </div>
                     <button class="btn" @click="addToCart">Add to cart</button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div v-else class="quick-view">
-        <div class="quick-view-inner">
-            <h2 class="d-flex justify-content-between">Please login to use this method
-                <slot></slot>
-            </h2>
-            <div class="link-to-login" style="text-align: center; margin-top: 120px;">
-                <router-link class="btn" to="/login" style="padding: 28px; font-size: 24px">login now
-                </router-link>
             </div>
         </div>
     </div>
@@ -72,26 +61,55 @@ export default {
         },
 
         async addToCart() {
-            let existItem = await axios.get('/cartItem/' + parseInt(this.user.user_id) + '/' + parseInt(this.food));
+            // If user is logged in, use the API
+            if (this.user) {
+                let existItem = await axios.get('/cartItem/' + parseInt(this.user.user_id) + '/' + parseInt(this.food));
 
-            if (existItem.data.length == 1) {
-                let data = {
-                    user_id: parseInt(this.user.user_id),
-                    food_id: parseInt(this.food),
-                    item_qty: parseInt(this.qty) + parseInt(existItem.data[0].item_qty)
-                };
-                await axios.put("/cartItem/", data)
-                this.$refs.alert.showAlert('success', 'Thank you!', 'Add To Cart Successfully !')
-
-            } else {
-                let data = {
-                    user_id: parseInt(this.user.user_id),
-                    food_id: parseInt(this.food),
-                    item_qty: parseInt(this.qty)
-                };
-
-                await axios.post("/cartItem/", data)
-                this.$refs.alert.showAlert('success', 'Thank you!', 'Add To Cart Successfully !')
+                if (existItem.data.length == 1) {
+                    let data = {
+                        user_id: parseInt(this.user.user_id),
+                        food_id: parseInt(this.food),
+                        item_qty: parseInt(this.qty) + parseInt(existItem.data[0].item_qty)
+                    };
+                    await axios.put("/cartItem/", data)
+                    this.$refs.alert.showAlert('success', 'Thank you!', 'Add To Cart Successfully!')
+                } else {
+                    let data = {
+                        user_id: parseInt(this.user.user_id),
+                        food_id: parseInt(this.food),
+                        item_qty: parseInt(this.qty)
+                    };
+                    await axios.post("/cartItem/", data)
+                    this.$refs.alert.showAlert('success', 'Thank you!', 'Add To Cart Successfully!')
+                }
+            } 
+            // If user is not logged in, use localStorage
+            else {
+                // Get the current cart from localStorage or initialize empty array
+                let localCart = JSON.parse(localStorage.getItem('guestCart')) || [];
+                
+                // Find the selected food from allFoods
+                const foodItem = this.selectedFood[0];
+                
+                // Check if the item is already in cart
+                const existingItemIndex = localCart.findIndex(item => item.food_id === parseInt(this.food));
+                
+                if (existingItemIndex !== -1) {
+                    // Update quantity if item exists
+                    localCart[existingItemIndex].qty = parseInt(localCart[existingItemIndex].qty) + parseInt(this.qty);
+                } else {
+                    // Add new item if it doesn't exist
+                    localCart.push({
+                        food_id: parseInt(this.food),
+                        qty: parseInt(this.qty),
+                        food: foodItem
+                    });
+                }
+                
+                // Save updated cart back to localStorage
+                localStorage.setItem('guestCart', JSON.stringify(localCart));
+                
+                this.$refs.alert.showAlert('success', 'Thank you!', 'Add To Cart Successfully!')
             }
         }
     },

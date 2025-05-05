@@ -67,7 +67,7 @@
                                             <label for="iQuantity"
                                                 style="font-size: 12px; padding-right: 2px;">Quantity:</label>
                                             <input type="number" id="iQuantity" class="form-control item-quantity"
-                                                :value="itemQuantity[index]" min="1" max="1000"
+                                                :value="user ? itemQuantity[index] : localCart[index].qty" min="1" max="1000"
                                                 @change="onQtyChange($event, index)">
                                         </div>
 
@@ -154,12 +154,9 @@ export default {
         return {
             cartItem: [],
             itemQuantity: [],
+            localCart: [],
         };
     },
-
-    // created() {
-    //     this.getAllCartItem();
-    // },
 
     mounted() {
         this.getAllCartItem();
@@ -169,9 +166,17 @@ export default {
         ...mapState(["allFoods", "user"]),
 
         filterFoods: function () {
-            return this.allFoods.filter(
-                (f) => this.matchID(f, this.cartItem)
-            );
+            // For logged in users, use cartItem array
+            if (this.user) {
+                return this.allFoods.filter(
+                    (f) => this.matchID(f, this.cartItem)
+                );
+            } 
+            // For non-logged in users, use localCart array
+            else {
+                // Get items directly from the localCart which already contains food details
+                return this.localCart.map(item => item.food);
+            }
         },
     },
 
@@ -187,19 +192,34 @@ export default {
         },
 
         calculateItemPrice: function (index) {
-            return ((parseInt(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
+            if (this.user) {
+                return ((parseInt(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString();
+            } else {
+                return ((parseInt(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.localCart[index].qty).toString();
+            }
         },
 
         calculateSummaryPrice: function () {
             let subtotal = 0;
             let discount = 0;
             let delivery = 15;
-            let i = 0;
-            while (i < this.itemQuantity.length) {
-                subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
-                discount = discount + parseInt(this.filterFoods[i].food_discount) * this.itemQuantity[i]
-                i = i + 1
+            
+            if (this.user) {
+                // For logged in users
+                let i = 0;
+                while (i < this.itemQuantity.length) {
+                    subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
+                    discount = discount + parseInt(this.filterFoods[i].food_discount) * this.itemQuantity[i]
+                    i = i + 1
+                }
+            } else {
+                // For non-logged in users
+                this.localCart.forEach((item, i) => {
+                    subtotal = subtotal + parseInt(item.food.food_price) * item.qty;
+                    discount = discount + parseInt(item.food.food_discount) * item.qty;
+                });
             }
+            
             if (!this.filterFoods.length) {
                 delivery = 0
             }
@@ -208,52 +228,73 @@ export default {
         },
 
         async onQtyChange(e, i) {
-            if (e.target.value < 1) {
-                e.target.value = 1
-                this.itemQuantity[i] = 1
+            const newQty = e.target.value < 1 ? 1 : e.target.value;
+            
+            if (this.user) {
+                // Update for logged in users
+                this.itemQuantity[i] = newQty;
+                let data = {
+                    user_id: parseInt(this.user.user_id),
+                    food_id: parseInt(this.cartItem[i]),
+                    item_qty: this.itemQuantity[i]
+                };
+                await axios.put("/cartItem/", data);
             } else {
-                this.itemQuantity[i] = e.target.value;
+                // Update for non-logged in users
+                this.localCart[i].qty = parseInt(newQty);
+                localStorage.setItem('guestCart', JSON.stringify(this.localCart));
             }
-
-            let data = {
-                user_id: parseInt(this.user.user_id),
-                food_id: parseInt(this.cartItem[i]),
-                item_qty: this.itemQuantity[i]
-            };
-            await axios.put("/cartItem/", data)
         },
 
         async cancelBtn() {
-            await axios.delete("/cartItem/" + this.user.user_id);
-
-            this.cartItem = [];
-            this.itemQuantity = [];
+            if (this.user) {
+                // Clear cart for logged in users
+                await axios.delete("/cartItem/" + this.user.user_id);
+                this.cartItem = [];
+                this.itemQuantity = [];
+            } else {
+                // Clear cart for non-logged in users
+                localStorage.removeItem('guestCart');
+                this.localCart = [];
+            }
         },
 
         checkOutBtn: function () {
-            this.$router.push("/checkout");
+            if (this.user) {
+                this.$router.push("/checkout");
+            } else {
+                // Redirect to login page with a return URL
+                this.$router.push("/login?redirect=checkout");
+            }
         },
 
         async removeBtn(index) {
-            await axios.delete("/cartItem/" + this.user.user_id + "/" + this.cartItem[index]);
-
-            this.cartItem.splice(index, 1);
-            this.itemQuantity.splice(index, 1);
+            if (this.user) {
+                // Remove item for logged in users
+                await axios.delete("/cartItem/" + this.user.user_id + "/" + this.cartItem[index]);
+                this.cartItem.splice(index, 1);
+                this.itemQuantity.splice(index, 1);
+            } else {
+                // Remove item for non-logged in users
+                this.localCart.splice(index, 1);
+                localStorage.setItem('guestCart', JSON.stringify(this.localCart));
+            }
         },
 
         async getAllCartItem() {
             if (this.user) {
+                // Get cart items for logged in users
                 let existItem = await axios.get('/cartItem/' + this.user.user_id);
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
                 });
+            } else {
+                // Get cart items from localStorage for non-logged in users
+                this.localCart = JSON.parse(localStorage.getItem('guestCart')) || [];
             }
         }
-
-
     }
-
 }
 </script>
 
