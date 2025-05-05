@@ -214,7 +214,7 @@ export default {
                 }
             } else {
                 // For non-logged in users
-                this.localCart.forEach((item, i) => {
+                this.localCart.forEach((item) => {
                     subtotal = subtotal + parseInt(item.food.food_price) * item.qty;
                     discount = discount + parseInt(item.food.food_discount) * item.qty;
                 });
