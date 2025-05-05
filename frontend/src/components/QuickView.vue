@@ -129,7 +129,6 @@ export default {
     bottom: 0;
     z-index: 99;
     background-color: rgba(0, 0, 0, 0.2);
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,7 +140,6 @@ export default {
     background-color: #fff;
     padding: 32px;
 }
-
 
 .quick-view .quick-view-inner h2 {
     margin: 0;
@@ -176,11 +174,9 @@ export default {
 }
 
 @media (max-width: 768px) {
-
     .quick-view .quick-view-inner {
         width: 50vw;
         height: 40vh;
-
     }
 
     .quick-view .quick-view-inner h2 {
@@ -196,7 +192,6 @@ export default {
         height: 12rem;
         margin: 30px;
         margin-left: 0px;
-
     }
 
     .quick-view .quick-view-inner .product-detail .content .desc {
@@ -206,10 +201,6 @@ export default {
     .quick-view .quick-view-inner .product-detail .content .qty {
         font-size: 12px;
     }
-
-    .link-to-login {
-        margin-top: 20px !important;
-    }
 }
 
 @media (max-width: 576px) {
@@ -217,15 +208,5 @@ export default {
         width: 90vw;
         height: 40vh;
     }
-
-    .link-to-login {
-        margin-top: 50px !important;
-    }
-
-    .link-to-login>a {
-        padding: 20px !important;
-        font-size: 18px !important;
-    }
-
 }
 </style>
