@@ -9,7 +9,7 @@
             <div class="about-content">
                 <img src="../assets/images/taco-chefcartoon.png" alt="">
                 <div class="about-content-text">
-                    <p>OurRestaurant was founded by Nikhil Kumar in 2020, combining traditional culinary techniques with modern innovation. Starting from a small local establishment, we have grown into a beloved dining destination known for exceptional taste and quality. Our commitment to using premium ingredients and creating memorable dining experiences has earned us a loyal following in the community.</p>
+                    <p>OurRestaurant was founded by Akshat Pandey in 2025, combining traditional culinary techniques with modern innovation. Starting from a small local establishment, we have grown into a beloved dining destination known for exceptional taste and quality. Our commitment to using premium ingredients and creating memorable dining experiences has earned us a loyal following in the community.</p>
                     <p>We invite you to dine with us to enjoy our warm, inviting atmosphere, or order online for a convenient dining experience at home. Either way, you'll taste the passion and dedication that goes into every dish we prepare.</p>
                 </div>
             </div>

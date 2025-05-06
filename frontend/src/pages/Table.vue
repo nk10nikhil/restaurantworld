@@ -16,7 +16,7 @@
 
             <div class="icons">
                 <img src="../assets/images/icon-2.png" alt="">
-                <h3>+91 7777048666</h3>
+                <h3>+91 9696393909</h3>
             </div>
 
             <div class="icons">
