@@ -78,35 +78,35 @@
                         <li>
                             <input type="button" name="rPrice" id="rtfPrice" value="2,5" hidden
                                 @click="filterPriceBtn($event)" />
-                            <label for="rtfPrice" class="d-flex justify-content-between">$2 - $5 <button
+                            <label for="rtfPrice" class="d-flex justify-content-between">Rs.2 - Rs.5 <button
                                     class="unselect-btn" @click="unselectPriceBtn($event)">X</button></label>
                         </li>
 
                         <li>
                             <input type="button" name="rPrice" id="rftPrice" value="5,10" hidden
                                 @click="filterPriceBtn($event)" />
-                            <label for="rftPrice" class="d-flex justify-content-between">$5 - $10 <button
+                            <label for="rftPrice" class="d-flex justify-content-between">Rs.5 - Rs.10 <button
                                     class="unselect-btn" @click="unselectPriceBtn($event)">X</button></label>
                         </li>
 
                         <li>
                             <input type="button" name="rPrice" id="rttPrice" value="10,12" hidden
                                 @click="filterPriceBtn($event)" />
-                            <label for="rttPrice" class="d-flex justify-content-between">$10 - $12 <button
+                            <label for="rttPrice" class="d-flex justify-content-between">Rs.10 - Rs.12 <button
                                     class="unselect-btn" @click="unselectPriceBtn($event)">X</button></label>
                         </li>
 
                         <li>
                             <input type="button" name="rPrice" id="mtPrice" value="12" hidden
                                 @click="filterPriceBtn($event)" />
-                            <label for="mtPrice" class="d-flex justify-content-between">{{ ">" }} $12 <button
+                            <label for="mtPrice" class="d-flex justify-content-between">{{ ">" }} Rs.12 <button
                                     class="unselect-btn" @click="unselectPriceBtn($event)">X</button></label>
                         </li>
 
                         <li>
                             <input type="button" name="rPrice" id="ltPrice" value="2" hidden
                                 @click="filterPriceBtn($event)" />
-                            <label for="ltPrice" class="d-flex justify-content-between">{{ "<" }} $2 <button
+                            <label for="ltPrice" class="d-flex justify-content-between">{{ "<" }} Rs.2 <button
                                     class="unselect-btn" @click="unselectPriceBtn($event)">X</button></label>
                         </li>
 
@@ -182,8 +182,8 @@
                                     <p>{{ f.food_desc }}</p>
                                 </div>
                                 <div class="price">
-                                    ${{ parseFloat(f.food_price) - parseFloat(f.food_discount) }}
-                                    <span v-if="parseFloat(f.food_discount) != 0.00">${{ parseFloat(f.food_price)
+                                    Rs.{{ parseFloat(f.food_price) - parseFloat(f.food_discount) }}
+                                    <span v-if="parseFloat(f.food_discount) != 0.00">Rs.{{ parseFloat(f.food_price)
                                     }}</span>
                                 </div>
                                 <button class="btn" @click="addItem(index)">Add to cart</button>
