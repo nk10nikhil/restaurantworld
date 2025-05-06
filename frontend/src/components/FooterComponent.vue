@@ -53,9 +53,9 @@
                 <h3>opening hours</h3>
                 <p>everyday : 7:00am to 10:00pm</p>
                 <h3>contact us</h3>
-                <p><i class="fas fa-user"></i> Nikhil Kumar</p>
-                <p><i class="fas fa-phone"></i> 7777048666</p>
-                <p><i class="fas fa-envelope"></i> nk10nikhil@gmail.com</p>
+                <p><i class="fas fa-user"></i> Akshat Pandey</p>
+                <p><i class="fas fa-phone"></i>+91 9696393909 </p>
+                <p><i class="fas fa-envelope"></i> pandeyakshat2504@gmail.com</p>
             </div>
 
         </div>
@@ -70,7 +70,7 @@
             </div>
             
             <div class="credit">
-                <p>© 2025 OurRestaurant | Created by <span>Nikhil Kumar</span></p>
+                <p>© 2025 OurRestaurant | Created by <span>Akshat Pandey</span></p>
             </div>
 
         </div>
